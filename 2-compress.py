@@ -10,23 +10,40 @@ QUALITY = 92  # 90–95 = золотая середина
 
 def compress(input_path, output_path):
     with Image.open(input_path) as img:
-        img = img.convert("RGB")  # JPEG не поддерживает alpha
-
-        img.save(
-            output_path.with_suffix(".jpg"),
-            "JPEG",
-            quality=QUALITY,
-            optimize=True,
-            progressive=True
-        )
+        # Для JPG → RGB, для PNG можно оставить RGBA
+        if input_path.suffix.lower() in [".jpg", ".jpeg"]:
+            img = img.convert("RGB")
+            img.save(
+                output_path.with_suffix(".jpg"),
+                "JPEG",
+                quality=QUALITY,
+                optimize=True,
+                progressive=True
+            )
+        elif input_path.suffix.lower() == ".png":
+            img = img.convert("RGB")  # убираем альфу, иначе JPEG не сохранится
+            img.save(
+                output_path.with_suffix(".jpg"),
+                "JPEG",
+                quality=QUALITY,
+                optimize=True,
+                progressive=True
+            )
 
 
 def main():
-    for file in INPUT_DIR.glob("*.png"):
+    files = list(INPUT_DIR.glob("*.png")) + list(INPUT_DIR.glob("*.jpg")) + list(INPUT_DIR.glob("*.jpeg"))
+
+    if not files:
+        print("No PNG/JPG files found in:", INPUT_DIR)
+        return
+
+    for file in files:
         out = OUTPUT_DIR / file.stem
         compress(file, out)
+        print(file.name, "->", out.name + ".jpg")
 
-        print(file.name, "->", out.name)
+    print("All images processed.")
 
 
 if __name__ == "__main__":
