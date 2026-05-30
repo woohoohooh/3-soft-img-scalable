@@ -36,7 +36,7 @@ def upscale_image(input_path: Path, output_path: Path):
                 quality=95,  # высокое качество
                 optimize=True
             )
-
+# 123
 
 def main():
     files = list(INPUT_DIR.glob("*.png")) + list(INPUT_DIR.glob("*.jpg")) + list(INPUT_DIR.glob("*.jpeg"))
