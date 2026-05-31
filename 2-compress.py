@@ -5,7 +5,7 @@ INPUT_DIR = Path("1-scalabled")
 OUTPUT_DIR = Path("2-compressed")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-QUALITY = 92  # 90–95 = золотая середина
+QUALITY = 92  # 90–95 = золотая середина дина
 
 
 def compress(input_path, output_path):
